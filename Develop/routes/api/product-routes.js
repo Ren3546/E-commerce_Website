@@ -7,34 +7,31 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 router.get('/', async (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
-  try {
-    const productData = await Product.findAll({
+  Product.findAll({
       include: [{ model: Tag }, { model: Category}],
-    });
-    res.status(200).json(productData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    }).then(productData => {
+      res.json(productData)
+   }).catch(err => {
+       res.status(500).json({msg:`Server Error!`, err});
+       console.log(err);
+   })
 });
 
 // get one product
 router.get('/:id', async (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
-  try {
-    const productData = await productData.findByPk(req.params.id, {
+  Product.findByPk(req.params.id, {
       include: [{ model: Category }, { model: Tag}],
-    });
-
-    if (!productData) {
-      res.status(404).json({ message: 'No product found with that id!' });
-      return;
-    }
-
-    res.status(200).json(productData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    }).then(productData => {
+      if(!productData) {
+       return res.status(404).json(`No message exists!`)
+      }
+      res.json(productData)
+   }).catch(err => {
+       res.status(500).json({msg:`Server Error!`, err});
+       console.log(err);
+   })
 });
 
 // create new product
