@@ -16,13 +16,12 @@ router.get('/', (req, res) => {
        res.status(500).json({msg:`Server Error!`, err});
        console.log(err);
    })
-  // be sure to include its associated Products
+
   
 
 })
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
-  // be sure to include its associated Products
   Category.findByPk(req.params.id, {
     include: [{ model: Product }],
   }).then(categoryData => {
